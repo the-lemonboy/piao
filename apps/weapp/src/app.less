@@ -1,0 +1,51 @@
+@import './styles/variables.less';
+
+page {
+  min-height: 100%;
+  color: @color-text;
+  background: @color-page;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+}
+
+view,
+text {
+  box-sizing: border-box;
+}
+
+.page {
+  min-height: 100vh;
+  padding: 32px @page-x calc(@footer-height + @footer-safe-gap + env(safe-area-inset-bottom));
+  background-color: @color-page;
+  background-image:
+    radial-gradient(circle at 7% 12%, rgba(44, 39, 31, 0.16) 1px, transparent 2px),
+    radial-gradient(circle at 18% 38%, rgba(44, 39, 31, 0.12) 1px, transparent 2px),
+    radial-gradient(circle at 28% 8%, rgba(44, 39, 31, 0.14) 1px, transparent 2px),
+    radial-gradient(circle at 39% 64%, rgba(44, 39, 31, 0.13) 1px, transparent 2px),
+    radial-gradient(circle at 53% 22%, rgba(44, 39, 31, 0.11) 1px, transparent 2px),
+    radial-gradient(circle at 61% 78%, rgba(44, 39, 31, 0.16) 1px, transparent 2px),
+    radial-gradient(circle at 74% 34%, rgba(44, 39, 31, 0.1) 1px, transparent 2px),
+    radial-gradient(circle at 86% 18%, rgba(44, 39, 31, 0.15) 1px, transparent 2px),
+    radial-gradient(circle at 92% 58%, rgba(44, 39, 31, 0.12) 1px, transparent 2px),
+    radial-gradient(circle at 12% 86%, rgba(44, 39, 31, 0.1) 1px, transparent 2px),
+    radial-gradient(circle at 46% 91%, rgba(44, 39, 31, 0.14) 1px, transparent 2px),
+    radial-gradient(circle at 79% 88%, rgba(44, 39, 31, 0.11) 1px, transparent 2px);
+  background-repeat: repeat;
+  background-size: 390px 530px, 460px 610px, 520px 470px, 610px 560px, 430px 690px, 570px 520px, 480px 640px, 650px 500px, 540px 720px, 700px 620px, 590px 590px, 760px 680px;
+}
+
+.muted {
+  color: @color-text-muted;
+}
+
+.primary-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 88px;
+  padding: 0 28px;
+  border-radius: @radius-sm;
+  color: #fff;
+  background: @color-teal;
+  font-size: 30px;
+  font-weight: 600;
+}

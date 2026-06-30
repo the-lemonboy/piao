@@ -1,0 +1,19 @@
+{
+  "name": "piaogen",
+  "private": true,
+  "version": "0.1.0",
+  "description": "票根微信小程序 monorepo",
+  "packageManager": "pnpm@8.15.9",
+  "scripts": {
+    "build:shared": "pnpm --filter @piaogen/shared build",
+    "dev:api": "pnpm build:shared && pnpm --filter @piaogen/api start:dev",
+    "dev:weapp": "pnpm build:shared && pnpm --filter @piaogen/weapp dev:weapp",
+    "build:api": "pnpm build:shared && pnpm --filter @piaogen/api build",
+    "build:weapp": "pnpm build:shared && pnpm --filter @piaogen/weapp build:weapp",
+    "typecheck": "pnpm build:shared && pnpm -r --if-present typecheck",
+    "lint": "pnpm -r --if-present lint"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

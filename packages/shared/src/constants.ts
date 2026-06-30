@@ -1,0 +1,10 @@
+export const API_PREFIX = 'api';
+
+export const TICKET_CATEGORIES = [
+  'movie',
+  'concert',
+  'travel',
+  'exhibition',
+  'sports',
+  'other'
+] as const;

@@ -1,0 +1,137 @@
+@import '../../styles/variables.less';
+
+.home-page {
+  background-color: @color-surface;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  padding: 2px 0 34px;
+  white-space: nowrap;
+}
+
+.filter-chip {
+  display: flex;
+  min-width: 96px;
+  height: 56px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0 28px;
+  border-radius: 28px;
+  color: #5d5a54;
+  background: @color-chip;
+  box-shadow: 0 8px 18px rgba(37, 31, 22, 0.07);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.filter-chip-active {
+  color: #fff;
+  background: @color-primary;
+  box-shadow: 0 12px 22px rgba(235, 61, 53, 0.25);
+}
+
+.masonry {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.masonry-column {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.memory-card {
+  overflow: hidden;
+  border: 1px solid rgba(221, 211, 191, 0.72);
+  border-radius: @radius-sm;
+  background: @color-card;
+  box-shadow: 0 10px 24px @color-shadow;
+}
+
+.memory-image {
+  width: 100%;
+  height: 392px;
+  background: #d9d5ca;
+}
+
+.memory-card-short .memory-image {
+  height: 326px;
+}
+
+.memory-image-empty {
+  display: flex;
+}
+
+.memory-body {
+  position: relative;
+  padding: 24px;
+}
+
+.ticket-perforation {
+  height: 1px;
+  margin-bottom: 22px;
+  border-top: 2px dotted #d8cfc0;
+}
+
+.memory-date {
+  display: block;
+  margin-bottom: 10px;
+  color: @color-text-muted;
+  font-size: 20px;
+  letter-spacing: 0;
+}
+
+.memory-title {
+  display: block;
+  min-height: 76px;
+  color: @color-text;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.28;
+}
+
+.memory-tag {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  min-height: 38px;
+  margin-top: 18px;
+  padding: 0 18px;
+  border-radius: 19px;
+  color: #7d4a45;
+  background: #f8e8e5;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.memory-tag-concert {
+  color: #1d6d68;
+  background: #dff3ef;
+}
+
+.memory-tag-exhibition {
+  color: #2b756e;
+  background: #d8f0ef;
+}
+
+.memory-tag-travel,
+.memory-tag-sports,
+.memory-tag-other {
+  color: #6e5b2d;
+  background: #f3ebd2;
+}
+
+.empty {
+  padding: 48px 0;
+  color: @color-text-muted;
+  text-align: center;
+  font-size: 28px;
+}

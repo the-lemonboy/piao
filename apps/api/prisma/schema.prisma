@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  openId    String   @unique
+  nickname  String
+  avatarUrl String?
+  phone     String?
+  email     String?
+  gender    String?
+  birthday  String?
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions Session[]
+  tickets  Ticket[]
+}
+
+model Session {
+  token     String   @id
+  userId    String
+  createdAt DateTime @default(now())
+  expiresAt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Ticket {
+  id        String         @id @default(uuid())
+  title     String
+  venue     String
+  eventDate DateTime
+  category  TicketCategory
+  imageUrl  String?
+  note      String?
+  city      String?
+  userId    String?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([eventDate])
+  @@index([category])
+  @@index([userId])
+}
+
+model DailyQuote {
+  id        String   @id @default(uuid())
+  quoteDate DateTime @unique
+  content   String
+  author    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+}
+
+enum TicketCategory {
+  movie
+  concert
+  travel
+  exhibition
+  sports
+  other
+}
