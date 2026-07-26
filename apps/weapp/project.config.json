@@ -2,7 +2,7 @@
   "miniprogramRoot": "dist/",
   "projectname": "piaogen-weapp",
   "description": "票根微信小程序",
-  "appid": "wxa0b5b54326c68be6",
+  "appid": "wx55b029cbbdb2b228",
   "setting": {
     "urlCheck": false,
     "es6": true,

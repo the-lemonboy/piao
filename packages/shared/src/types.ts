@@ -10,6 +10,8 @@ export interface Ticket {
   category: TicketCategory;
   imageUrl?: string;
   note?: string;
+  city?: string;
+  details?: Record<string, string>;
   createdAt: string;
   updatedAt: string;
 }
@@ -30,7 +32,11 @@ export interface CreateTicketPayload {
   category: TicketCategory;
   imageUrl?: string;
   note?: string;
+  city?: string;
+  details?: Record<string, string>;
 }
+
+export type UpdateTicketPayload = Partial<CreateTicketPayload>;
 
 export interface UserProfile {
   id: string;
@@ -72,6 +78,24 @@ export interface UpdateUserProfilePayload {
   gender?: string;
   birthday?: string;
   bio?: string;
+}
+
+export type OcrTicketTemplateType = 'flight' | 'movie' | 'train' | 'scenic' | 'unknown';
+
+export interface RecognizeTicketPayload {
+  imageBase64: string;
+}
+
+export interface OcrTextLine {
+  text: string;
+  confidence?: number;
+}
+
+export interface RecognizedTicketResult {
+  templateType: OcrTicketTemplateType;
+  title?: string;
+  rawText: string;
+  lines: OcrTextLine[];
 }
 
 export interface ApiResponse<T> {

@@ -8,7 +8,8 @@
   display: flex;
   gap: 18px;
   overflow-x: auto;
-  padding: 2px 0 34px;
+  margin: 0 -30px 34px;
+  padding: 2px 30px 4px;
   white-space: nowrap;
 }
 
@@ -23,7 +24,6 @@
   border-radius: 28px;
   color: #5d5a54;
   background: @color-chip;
-  box-shadow: 0 8px 18px rgba(37, 31, 22, 0.07);
   font-size: 24px;
   font-weight: 600;
 }
@@ -31,7 +31,37 @@
 .filter-chip-active {
   color: #fff;
   background: @color-primary;
-  box-shadow: 0 12px 22px rgba(235, 61, 53, 0.25);
+}
+
+.category-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.category-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.category-title {
+  color: @color-text;
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.category-count {
+  color: @color-text-muted;
+  font-size: 22px;
+  font-weight: 700;
 }
 
 .masonry {
@@ -57,17 +87,143 @@
 }
 
 .memory-image {
+  display: flex;
   width: 100%;
   height: 392px;
+  align-items: center;
+  justify-content: center;
+  color: #a29a8f;
   background: #d9d5ca;
+  font-size: 24px;
+  font-weight: 900;
 }
 
-.memory-card-short .memory-image {
+.masonry-column:nth-child(2n) .memory-card:nth-child(2n + 1) .memory-image,
+.masonry-column:nth-child(2n + 1) .memory-card:nth-child(2n) .memory-image {
   height: 326px;
 }
 
 .memory-image-empty {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.42), transparent),
+    #d9d5ca;
+}
+
+.memory-train-cover {
+  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  padding: 34px 28px 38px;
+  overflow: hidden;
+  color: #2f342f;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(242, 235, 214, 0.2)),
+    #f5efd9;
+}
+
+.memory-train-cover::before {
+  position: absolute;
+  top: 38px;
+  right: -44px;
+  width: 182px;
+  height: 182px;
+  border: 2px solid rgba(143, 128, 83, 0.12);
+  border-radius: 50%;
+  content: '';
+}
+
+.memory-train-cover::after {
+  position: absolute;
+  top: 82px;
+  right: 30px;
+  width: 118px;
+  height: 68px;
+  border-top: 4px solid rgba(47, 82, 73, 0.12);
+  border-bottom: 4px solid rgba(47, 82, 73, 0.12);
+  content: '';
+}
+
+.train-cover-rail {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  border-top: 2px dashed rgba(126, 112, 78, 0.22);
+}
+
+.train-cover-rail-top {
+  top: 34px;
+}
+
+.train-cover-rail-bottom {
+  bottom: 30px;
+}
+
+.train-cover-badge {
+  position: absolute;
+  top: 56px;
+  left: 28px;
   display: flex;
+  min-width: 72px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border: 1px solid rgba(213, 56, 48, 0.24);
+  border-radius: 21px;
+  color: @color-primary;
+  background: rgba(235, 61, 53, 0.08);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.train-cover-route {
+  position: relative;
+  z-index: 1;
+  display: block;
+  max-width: 100%;
+  color: #252525;
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 1.28;
+}
+
+.train-cover-meta {
+  position: relative;
+  z-index: 1;
+  display: block;
+  max-width: 100%;
+  margin-top: 12px;
+  color: #7d735f;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.train-cover-line {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.train-cover-track {
+  height: 3px;
+  flex: 1;
+  border-radius: 999px;
+  background: rgba(47, 82, 73, 0.28);
+}
+
+.train-cover-node {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border-radius: 50%;
+  background: #2f5249;
 }
 
 .memory-body {
@@ -112,19 +268,17 @@
   font-weight: 700;
 }
 
-.memory-tag-concert {
-  color: #1d6d68;
-  background: #dff3ef;
+.memory-tag-movie {
+  color: #7d4a45;
+  background: #f8e8e5;
 }
 
-.memory-tag-exhibition {
+.memory-tag-scenic {
   color: #2b756e;
   background: #d8f0ef;
 }
 
-.memory-tag-travel,
-.memory-tag-sports,
-.memory-tag-other {
+.memory-tag-train {
   color: #6e5b2d;
   background: #f3ebd2;
 }
@@ -134,4 +288,8 @@
   color: @color-text-muted;
   text-align: center;
   font-size: 28px;
+}
+
+.home-empty {
+  padding: 26px 0 64px;
 }

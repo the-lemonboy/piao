@@ -8,6 +8,8 @@ export interface Ticket {
     category: TicketCategory;
     imageUrl?: string;
     note?: string;
+    city?: string;
+    details?: Record<string, string>;
     createdAt: string;
     updatedAt: string;
 }
@@ -26,6 +28,60 @@ export interface CreateTicketPayload {
     category: TicketCategory;
     imageUrl?: string;
     note?: string;
+    city?: string;
+    details?: Record<string, string>;
+}
+export type UpdateTicketPayload = Partial<CreateTicketPayload>;
+export interface UserProfile {
+    id: string;
+    openId: string;
+    nickname: string;
+    avatarUrl?: string;
+    phone?: string;
+    email?: string;
+    gender?: string;
+    birthday?: string;
+    bio?: string;
+    createdAt: string;
+    updatedAt: string;
+}
+export interface UserStats {
+    totalTickets: number;
+    cities: number;
+    days: number;
+}
+export interface AuthSession {
+    token: string;
+    user: UserProfile;
+    stats: UserStats;
+}
+export interface WechatLoginPayload {
+    code: string;
+    nickname?: string;
+    avatarUrl?: string;
+}
+export interface UpdateUserProfilePayload {
+    nickname?: string;
+    avatarUrl?: string;
+    phone?: string;
+    email?: string;
+    gender?: string;
+    birthday?: string;
+    bio?: string;
+}
+export type OcrTicketTemplateType = 'flight' | 'movie' | 'train' | 'scenic' | 'unknown';
+export interface RecognizeTicketPayload {
+    imageBase64: string;
+}
+export interface OcrTextLine {
+    text: string;
+    confidence?: number;
+}
+export interface RecognizedTicketResult {
+    templateType: OcrTicketTemplateType;
+    title?: string;
+    rawText: string;
+    lines: OcrTextLine[];
 }
 export interface ApiResponse<T> {
     data: T;

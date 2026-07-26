@@ -7,7 +7,6 @@ exports.TICKET_CATEGORIES = [
     'concert',
     'travel',
     'exhibition',
-    'sports',
     'other'
 ];
 //# sourceMappingURL=constants.js.map

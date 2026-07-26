@@ -1,20 +1,24 @@
 import { TICKET_CATEGORIES, TicketCategory } from '@piaogen/shared';
 import { IsIn, IsISO8601, IsObject, IsOptional, IsString, MaxLength } from 'class-validator';
 
-export class CreateTicketDto {
+export class UpdateTicketDto {
+  @IsOptional()
   @IsString()
   @MaxLength(80)
-  title!: string;
+  title?: string;
 
+  @IsOptional()
   @IsString()
   @MaxLength(80)
-  venue!: string;
+  venue?: string;
 
+  @IsOptional()
   @IsISO8601()
-  eventDate!: string;
+  eventDate?: string;
 
+  @IsOptional()
   @IsIn(TICKET_CATEGORIES)
-  category!: TicketCategory;
+  category?: TicketCategory;
 
   @IsOptional()
   @IsString()

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateTicketPayload, Ticket, TicketCategory } from '@piaogen/shared';
+import { CreateTicketPayload, Ticket, TicketCategory, UpdateTicketPayload } from '@piaogen/shared';
 import { PrismaService } from '../../common/prisma/prisma.service';
 
 type PrismaTicket = {
@@ -10,6 +10,8 @@ type PrismaTicket = {
   category: string;
   imageUrl: string | null;
   note: string | null;
+  city: string | null;
+  detailsJson: string | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -43,10 +45,42 @@ export class TicketsService {
   }
 
   async create(payload: CreateTicketPayload): Promise<Ticket> {
+    const { details, ...ticketPayload } = payload;
     const ticket = await this.prisma.ticket.create({
       data: {
-        ...payload,
+        ...ticketPayload,
+        detailsJson: details ? JSON.stringify(details) : undefined,
         eventDate: new Date(payload.eventDate)
+      }
+    });
+
+    return this.toTicket(ticket);
+  }
+
+  async update(id: string, payload: UpdateTicketPayload): Promise<Ticket> {
+    await this.findOne(id);
+
+    const { details, eventDate, ...ticketPayload } = payload;
+    const ticket = await this.prisma.ticket.update({
+      where: {
+        id
+      },
+      data: {
+        ...ticketPayload,
+        ...(eventDate ? { eventDate: new Date(eventDate) } : {}),
+        ...(details ? { detailsJson: JSON.stringify(details) } : {})
+      }
+    });
+
+    return this.toTicket(ticket);
+  }
+
+  async remove(id: string): Promise<Ticket> {
+    await this.findOne(id);
+
+    const ticket = await this.prisma.ticket.delete({
+      where: {
+        id
       }
     });
 
@@ -62,8 +96,34 @@ export class TicketsService {
       category: ticket.category as TicketCategory,
       imageUrl: ticket.imageUrl ?? undefined,
       note: ticket.note ?? undefined,
+      city: ticket.city ?? undefined,
+      details: this.parseDetails(ticket.detailsJson),
       createdAt: ticket.createdAt.toISOString(),
       updatedAt: ticket.updatedAt.toISOString()
     };
+  }
+
+  private parseDetails(value: string | null): Record<string, string> | undefined {
+    if (!value) {
+      return undefined;
+    }
+
+    try {
+      const parsed = JSON.parse(value);
+
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        return undefined;
+      }
+
+      return Object.entries(parsed).reduce<Record<string, string>>((result, [key, item]) => {
+        if (typeof item === 'string') {
+          result[key] = item;
+        }
+
+        return result;
+      }, {});
+    } catch {
+      return undefined;
+    }
   }
 }

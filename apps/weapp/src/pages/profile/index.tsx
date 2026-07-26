@@ -3,6 +3,7 @@ import Taro, { useDidShow } from '@tarojs/taro';
 import { AuthSession } from '@piaogen/shared';
 import { useState } from 'react';
 import { AppFooter } from '../../components/AppFooter';
+import { IconifyIcon } from '../../components/IconifyIcon';
 import { AUTH_TOKEN_KEY, getMe, loginWithWechat, logout } from '../../services/auth';
 import './index.less';
 
@@ -91,6 +92,30 @@ export default function ProfilePage() {
     setSession(null);
   };
 
+  const handleClearCache = async () => {
+    const confirmed = await Taro.showModal({
+      title: '清理缓存',
+      content: '将清理本地临时缓存，登录状态会保留。',
+      confirmText: '清理'
+    });
+
+    if (!confirmed.confirm) {
+      return;
+    }
+
+    const token = Taro.getStorageSync(AUTH_TOKEN_KEY);
+    Taro.clearStorageSync();
+
+    if (token) {
+      Taro.setStorageSync(AUTH_TOKEN_KEY, token);
+    }
+
+    Taro.showToast({
+      title: '已清理',
+      icon: 'success'
+    });
+  };
+
   const user = session?.user;
 
   return (
@@ -117,30 +142,40 @@ export default function ProfilePage() {
       <View className='setting-list'>
         <View className='setting-row'>
           <View className='setting-main'>
-            <View className='setting-icon setting-icon-version' />
+            <View className='setting-icon'>
+              <IconifyIcon color='#9b9b96' icon='info-rounded' />
+            </View>
             <Text className='setting-label'>当前版本</Text>
           </View>
           <Text className='setting-value'>v{APP_VERSION}</Text>
         </View>
         <View className='setting-row'>
           <View className='setting-main'>
-            <View className='setting-icon setting-icon-doc' />
-            <Text className='setting-label'>用户协议</Text>
+            <View className='setting-icon'>
+              <IconifyIcon color='#9b9b96' icon='feedback-rounded' />
+            </View>
+            <Text className='setting-label'>意见反馈</Text>
           </View>
-          <Text className='setting-arrow'>›</Text>
+          <Button className='setting-feedback-button' openType='feedback'>
+            <IconifyIcon className='setting-arrow' color='#8b8b86' icon='chevron-right-rounded' />
+          </Button>
         </View>
-        <View className='setting-row'>
+        <View className='setting-row' onClick={handleClearCache}>
           <View className='setting-main'>
-            <View className='setting-icon setting-icon-lock' />
-            <Text className='setting-label'>隐私政策</Text>
+            <View className='setting-icon'>
+              <IconifyIcon color='#9b9b96' icon='delete-sweep-rounded' />
+            </View>
+            <Text className='setting-label'>清理缓存</Text>
           </View>
-          <Text className='setting-arrow'>›</Text>
+          <IconifyIcon className='setting-arrow' color='#8b8b86' icon='chevron-right-rounded' />
         </View>
       </View>
 
       {user ? (
         <View className='logout-row' onClick={handleLogout}>
-          <View className='logout-icon' />
+          <View className='logout-icon'>
+            <IconifyIcon color='#eb3d35' icon='logout-rounded' />
+          </View>
           <Text>退出登录</Text>
         </View>
       ) : null}

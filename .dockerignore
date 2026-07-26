@@ -1,0 +1,14 @@
+node_modules
+apps/*/node_modules
+packages/*/node_modules
+dist
+apps/*/dist
+packages/*/dist
+.git
+.DS_Store
+*.db
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+apps/weapp/src/assets/*.png

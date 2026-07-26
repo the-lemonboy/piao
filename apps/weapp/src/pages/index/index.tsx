@@ -1,26 +1,19 @@
 import { Image, Text, View } from '@tarojs/components';
 import Taro, { useDidShow } from '@tarojs/taro';
-import { Ticket, TicketCategory } from '@piaogen/shared';
-import { useMemo, useState } from 'react';
+import type { Ticket } from '@piaogen/shared';
+import { useEffect, useMemo, useState } from 'react';
 import { AppFooter } from '../../components/AppFooter';
 import { getTickets } from '../../services/tickets';
 import './index.less';
 
-const filters: Array<{ label: string; value: TicketCategory | 'all' }> = [
-  { label: '全部', value: 'all' },
-  { label: '电影', value: 'movie' },
-  { label: '演唱会', value: 'concert' },
-  { label: '展览', value: 'exhibition' },
-  { label: '戏剧', value: 'other' }
-];
+type HomeCategory = 'movie' | 'train' | 'scenic';
 
-const categoryLabel: Record<TicketCategory, string> = {
-  movie: '电影',
-  concert: '演唱会',
-  travel: '旅行',
-  exhibition: '展览',
-  sports: '运动',
-  other: '戏剧'
+const categoryOrder: HomeCategory[] = ['movie', 'train', 'scenic'];
+
+const categoryLabel: Record<HomeCategory, string> = {
+  movie: '电影票',
+  train: '车票',
+  scenic: '门票'
 };
 
 function formatDate(value: string) {
@@ -30,28 +23,86 @@ function formatDate(value: string) {
   return `${date.getFullYear()}.${month}.${day}`;
 }
 
+function buildColumns(items: Ticket[]) {
+  return items.reduce<[Ticket[], Ticket[]]>(
+    (result, ticket, index) => {
+      result[index % 2].push(ticket);
+      return result;
+    },
+    [[], []]
+  );
+}
+
+function getTicketSearchText(ticket: Ticket) {
+  return [ticket.title, ticket.venue, ticket.city, ticket.note].filter(Boolean).join('\n');
+}
+
+function resolveTrainRoute(ticket: Ticket) {
+  const details = ticket.details || {};
+  const from = details.fromStation || details.from;
+  const to = details.toStation || details.to;
+
+  if (from && to) {
+    return `${from} → ${to}`;
+  }
+
+  return ticket.title;
+}
+
+function resolveHomeCategory(ticket: Ticket): HomeCategory | null {
+  const text = getTicketSearchText(ticket);
+
+  if (ticket.category === 'movie' || /电影|影院|影城|cinema|movie|film/i.test(text)) {
+    return 'movie';
+  }
+
+  if (ticket.category === 'exhibition' || /景区|景点|门票|入园|admit one|scenic/i.test(text)) {
+    return 'scenic';
+  }
+
+  if (ticket.category === 'travel') {
+    return 'train';
+  }
+
+  return null;
+}
+
 export default function IndexPage() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState<TicketCategory | 'all'>('all');
+  const [activeCategory, setActiveCategory] = useState<HomeCategory | null>(null);
 
-  const visibleTickets = useMemo(() => {
-    if (activeFilter === 'all') {
-      return tickets;
+  const categorySections = useMemo(() => {
+    const categorizedTickets = tickets
+      .map((ticket) => ({
+        ticket,
+        category: resolveHomeCategory(ticket)
+      }))
+      .filter((item): item is { ticket: Ticket; category: HomeCategory } => Boolean(item.category));
+
+    return categoryOrder.map((category) => {
+      const items = categorizedTickets
+        .filter((item) => item.category === category)
+        .map((item) => item.ticket);
+
+      return {
+        category,
+        items,
+        columns: buildColumns(items)
+      };
+    });
+  }, [tickets]);
+  const visibleSections = useMemo(() => {
+    return activeCategory
+      ? categorySections.filter((section) => section.category === activeCategory)
+      : categorySections;
+  }, [activeCategory, categorySections]);
+
+  useEffect(() => {
+    if (!activeCategory || !categorySections.some((section) => section.category === activeCategory)) {
+      setActiveCategory(categorySections[0].category);
     }
-
-    return tickets.filter((ticket) => ticket.category === activeFilter);
-  }, [activeFilter, tickets]);
-
-  const columns = useMemo(() => {
-    return visibleTickets.reduce<[Ticket[], Ticket[]]>(
-      (result, ticket, index) => {
-        result[index % 2].push(ticket);
-        return result;
-      },
-      [[], []]
-    );
-  }, [visibleTickets]);
+  }, [activeCategory, categorySections]);
 
   useDidShow(() => {
     setLoading(true);
@@ -72,48 +123,88 @@ export default function IndexPage() {
     });
   };
 
+  const renderCover = (ticket: Ticket, category: HomeCategory) => {
+    if (category === 'train') {
+      return (
+        <View className='memory-image memory-train-cover'>
+          <View className='train-cover-rail train-cover-rail-top' />
+          <View className='train-cover-rail train-cover-rail-bottom' />
+          <View className='train-cover-badge'>
+            <Text>车票</Text>
+          </View>
+          <Text className='train-cover-route'>{resolveTrainRoute(ticket)}</Text>
+          <Text className='train-cover-meta'>{ticket.venue || ticket.city || 'TRAVEL TICKET'}</Text>
+          <View className='train-cover-line'>
+            <View className='train-cover-node' />
+            <View className='train-cover-track' />
+            <View className='train-cover-node' />
+          </View>
+        </View>
+      );
+    }
+
+    if (ticket.imageUrl) {
+      return <Image className='memory-image' mode='aspectFill' src={ticket.imageUrl} />;
+    }
+
+    return (
+      <View className='memory-image memory-image-empty'>
+        <Text>{categoryLabel[category]}</Text>
+      </View>
+    );
+  };
+
   return (
     <View className='page home-page'>
-      <View className='filter-bar'>
-        {filters.map((filter) => (
-          <View
-            className={`filter-chip ${filter.value === activeFilter ? 'filter-chip-active' : ''}`}
-            key={filter.value}
-            onClick={() => setActiveFilter(filter.value)}
-          >
-            <Text>{filter.label}</Text>
-          </View>
-        ))}
-      </View>
+      {categorySections.length > 0 ? (
+        <View className='filter-bar'>
+          {categorySections.map((section) => (
+            <View
+              className={`filter-chip ${section.category === activeCategory ? 'filter-chip-active' : ''}`}
+              key={section.category}
+              onClick={() => setActiveCategory(section.category)}
+            >
+              <Text>{categoryLabel[section.category]}</Text>
+            </View>
+          ))}
+        </View>
+      ) : null}
 
-      {loading ? <View className='empty'>加载中...</View> : null}
+      {loading ? <View className='empty home-empty'>加载中...</View> : null}
 
-      {!loading && visibleTickets.length === 0 ? <View className='empty'>还没有票根</View> : null}
+      {!loading && tickets.length === 0 ? <View className='empty home-empty'>还没有票根</View> : null}
 
-      <View className='masonry'>
-        {columns.map((column, columnIndex) => (
-          <View className='masonry-column' key={`column-${columnIndex}`}>
-            {column.map((ticket, index) => (
-              <View
-                className={`memory-card ${index % 2 === 0 ? 'memory-card-tall' : 'memory-card-short'}`}
-                key={ticket.id}
-                onClick={() => openDetail(ticket.id)}
-              >
-                {ticket.imageUrl ? (
-                  <Image className='memory-image' mode='aspectFill' src={ticket.imageUrl} />
-                ) : (
-                  <View className='memory-image memory-image-empty' />
-                )}
-                <View className='memory-body'>
-                  <View className='ticket-perforation' />
-                  <Text className='memory-date'>{formatDate(ticket.eventDate)}</Text>
-                  <Text className='memory-title'>{ticket.title}</Text>
-                  <Text className={`memory-tag memory-tag-${ticket.category}`}>
-                    {categoryLabel[ticket.category]}
-                  </Text>
+      {!loading && tickets.length > 0 && visibleSections.every((section) => section.items.length === 0) ? (
+        <View className='empty home-empty'>还没有{activeCategory ? categoryLabel[activeCategory] : '票根'}</View>
+      ) : null}
+
+      <View className='category-sections'>
+        {visibleSections.filter((section) => section.items.length > 0).map((section) => (
+          <View className='category-section' key={section.category}>
+            <View className='category-head'>
+              <Text className='category-title'>{categoryLabel[section.category]}</Text>
+              <Text className='category-count'>{section.items.length} 张</Text>
+            </View>
+
+            <View className='masonry'>
+              {section.columns.map((column, columnIndex) => (
+                <View className='masonry-column' key={`${section.category}-${columnIndex}`}>
+                  {column.map((ticket) => (
+                    <View className='memory-card' key={ticket.id} onClick={() => openDetail(ticket.id)}>
+                      {renderCover(ticket, section.category)}
+                      <View className='memory-body'>
+                        <View className='ticket-perforation' />
+                        <Text className='memory-date'>{formatDate(ticket.eventDate)}</Text>
+                        <Text className='memory-title'>{ticket.title}</Text>
+                        <Text className={`memory-tag memory-tag-${section.category}`}>
+                          {categoryLabel[section.category]}
+                        </Text>
+                      </View>
+                    </View>
+                  ))}
                 </View>
-              </View>
-            ))}
+              ))}
+            </View>
           </View>
         ))}
       </View>

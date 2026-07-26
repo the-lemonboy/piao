@@ -44,6 +44,7 @@ model Ticket {
   imageUrl  String?
   note      String?
   city      String?
+  detailsJson String?
   userId    String?
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
@@ -71,6 +72,5 @@ enum TicketCategory {
   concert
   travel
   exhibition
-  sports
   other
 }

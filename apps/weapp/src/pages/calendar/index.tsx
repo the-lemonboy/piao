@@ -3,6 +3,7 @@ import Taro, { useDidShow } from '@tarojs/taro';
 import type { DailyQuote, Ticket } from '@piaogen/shared';
 import { useMemo, useState } from 'react';
 import { AppFooter } from '../../components/AppFooter';
+import { IconifyIcon } from '../../components/IconifyIcon';
 import { getLatestDailyQuote } from '../../services/daily-quotes';
 import { getTickets } from '../../services/tickets';
 import './index.less';
@@ -104,6 +105,8 @@ export default function CalendarPage() {
     <View className='page calendar-page'>
       {dailyQuote ? (
         <View className='daily-quote'>
+          <View className='daily-quote-spine' />
+          <View className='daily-quote-ribbon' />
           <Text className='daily-quote-content'>{dailyQuote.content}</Text>
           <Text className='daily-quote-author'>- {dailyQuote.author}</Text>
         </View>
@@ -113,8 +116,12 @@ export default function CalendarPage() {
         <View className='calendar-head'>
           <Text className='month-title'>{monthDate.getFullYear()}年{monthDate.getMonth() + 1}月</Text>
           <View className='month-actions'>
-            <View className='month-arrow' onClick={() => setMonthDate(addMonths(monthDate, -1))}>‹</View>
-            <View className='month-arrow' onClick={() => setMonthDate(addMonths(monthDate, 1))}>›</View>
+            <View className='month-arrow' onClick={() => setMonthDate(addMonths(monthDate, -1))}>
+              <IconifyIcon color='#eb3d35' icon='chevron-left-rounded' />
+            </View>
+            <View className='month-arrow' onClick={() => setMonthDate(addMonths(monthDate, 1))}>
+              <IconifyIcon color='#eb3d35' icon='chevron-right-rounded' />
+            </View>
           </View>
         </View>
 

@@ -5,6 +5,5 @@ export const TICKET_CATEGORIES = [
   'concert',
   'travel',
   'exhibition',
-  'sports',
   'other'
 ] as const;

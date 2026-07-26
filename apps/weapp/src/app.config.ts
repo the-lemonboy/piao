@@ -5,6 +5,7 @@ export default defineAppConfig({
     'pages/calendar/index',
     'pages/add-ticket/index',
     'pages/ticket-detail/index',
+    'pages/ticket-templates/index',
     'pages/profile/index',
     'pages/profile-detail/index'
   ],

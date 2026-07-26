@@ -1,7 +1,8 @@
 import { Button, Image, Input, Picker, Text, Textarea, View } from '@tarojs/components';
 import Taro, { useDidShow } from '@tarojs/taro';
-import { UpdateUserProfilePayload, UserProfile } from '@piaogen/shared';
+import type { UpdateUserProfilePayload, UserProfile } from '@piaogen/shared';
 import { useState } from 'react';
+import { IconifyIcon } from '../../components/IconifyIcon';
 import { AUTH_TOKEN_KEY, getMe, updateProfile } from '../../services/auth';
 import './index.less';
 
@@ -130,7 +131,9 @@ export default function ProfileDetailPage() {
             )}
           </View>
           <View className='camera-badge'>
-            <View className='camera-icon' />
+            <View className='camera-icon'>
+              <IconifyIcon color='#ffffff' icon='photo-camera-rounded' />
+            </View>
           </View>
         </View>
         <Text className='change-avatar-text'>CHANGE AVATAR</Text>
@@ -200,7 +203,9 @@ export default function ProfileDetailPage() {
           <Picker mode='date' value={form.birthday} onChange={(event) => updateForm('birthday', String(event.detail.value))}>
             <View className='birthday-row'>
               <Text className={form.birthday ? 'profile-value' : 'profile-placeholder'}>{form.birthday || '请选择生日'}</Text>
-              <View className='calendar-icon' />
+              <View className='calendar-icon'>
+                <IconifyIcon color='#202326' icon='calendar-month-rounded' />
+              </View>
             </View>
           </Picker>
         </View>

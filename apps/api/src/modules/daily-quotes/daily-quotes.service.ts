@@ -140,12 +140,12 @@ export class DailyQuotesService implements OnModuleInit, OnModuleDestroy {
       {
         role: 'system',
         content:
-          '你是票根收藏应用的每日一句生成器。必须只返回一个合法 JSON 对象，不要 Markdown，不要解释。JSON 必须包含 content 和 author 两个字符串字段。'
+          '你是票根收藏应用的书签文案生成器。必须只返回一个合法 JSON 对象，不要 Markdown，不要解释。JSON 必须包含 content 和 author 两个字符串字段。'
       },
       {
         role: 'user',
         content:
-          '请为今天生成一句适合票根收藏、电影、演出、旅行回忆场景展示的每日一句。优先选择公版文学、古典诗文、已进入公共领域作品中的短句，或不超过 25 个汉字的经典电影/书籍风格短句；author 写清作者或作品名。不要输出长段受版权保护原文；如果无法确认精确出处，author 写“原创”。只返回 JSON：{"content":"xxx","author":"xxx"}'
+          '请从王小波已经出版的书或杂文中选择一句适合票根收藏、电影、演出、旅行回忆场景展示的书签短句。必须是真实原句，不要改写，不要伪造出处；content 不超过 24 个汉字，author 写成“王小波《作品名》”。如果不能确认原句和出处，返回一句短的公版文学摘句，author 写清作者和作品。只返回 JSON：{"content":"xxx","author":"王小波《作品名》"}'
       }
     ];
   }

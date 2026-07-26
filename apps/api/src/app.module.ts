@@ -4,6 +4,7 @@ import { PrismaModule } from './common/prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { DailyQuotesModule } from './modules/daily-quotes/daily-quotes.module';
 import { HealthModule } from './modules/health/health.module';
+import { OcrModule } from './modules/ocr/ocr.module';
 import { TicketsModule } from './modules/tickets/tickets.module';
 
 @Module({
@@ -15,6 +16,7 @@ import { TicketsModule } from './modules/tickets/tickets.module';
     AuthModule,
     DailyQuotesModule,
     HealthModule,
+    OcrModule,
     TicketsModule
   ]
 })
