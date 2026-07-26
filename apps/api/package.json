@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "build": "nest build",
+    "db:cleanup-seed": "node scripts/cleanup-seed-tickets.cjs",
     "db:seed": "node prisma/seed.js",
     "prisma:generate": "node scripts/prisma-generate-local-engine.cjs",
     "prisma:migrate": "prisma migrate dev",

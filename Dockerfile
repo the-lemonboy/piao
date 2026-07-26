@@ -27,4 +27,4 @@ ENV NODE_ENV=production
 
 EXPOSE 80
 
-CMD ["sh", "-c", "mkdir -p /app/data && pnpm --filter @piaogen/api exec prisma db push && pnpm --filter @piaogen/api db:seed && pnpm --filter @piaogen/api start:prod"]
+CMD ["sh", "-c", "mkdir -p /app/data && pnpm --filter @piaogen/api exec prisma db push && pnpm --filter @piaogen/api db:cleanup-seed && pnpm --filter @piaogen/api start:prod"]
