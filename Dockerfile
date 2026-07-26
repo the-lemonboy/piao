@@ -4,7 +4,6 @@ WORKDIR /app
 
 ENV PNPM_HOME=/pnpm
 ENV PATH=$PNPM_HOME:$PATH
-ENV NODE_ENV=production
 ENV PORT=80
 ENV DATABASE_URL=file:/app/data/prod.db
 
@@ -15,7 +14,7 @@ COPY apps/api/package.json apps/api/package.json
 COPY apps/weapp/package.json apps/weapp/package.json
 COPY packages/shared/package.json packages/shared/package.json
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --prod=false
 
 COPY apps/api apps/api
 COPY packages/shared packages/shared
@@ -23,6 +22,8 @@ COPY packages/shared packages/shared
 RUN pnpm build:shared \
   && pnpm --filter @piaogen/api prisma:generate \
   && pnpm --filter @piaogen/api build
+
+ENV NODE_ENV=production
 
 EXPOSE 80
 
