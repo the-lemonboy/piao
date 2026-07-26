@@ -14,7 +14,10 @@ export default defineConfig(async (merge) => {
     outputRoot: 'dist',
     plugins: [],
     defineConstants: {
-      API_BASE_URL: JSON.stringify(process.env.TARO_APP_API_BASE_URL || 'http://127.0.0.1:3000/api')
+      API_BASE_URL: JSON.stringify(process.env.TARO_APP_API_BASE_URL || 'http://127.0.0.1:3000/api'),
+      CLOUD_CONTAINER_ENV: JSON.stringify(process.env.TARO_APP_CLOUD_CONTAINER_ENV || ''),
+      CLOUD_CONTAINER_SERVICE: JSON.stringify(process.env.TARO_APP_CLOUD_CONTAINER_SERVICE || ''),
+      CLOUD_CONTAINER_API_PREFIX: JSON.stringify(process.env.TARO_APP_CLOUD_CONTAINER_API_PREFIX || '/api')
     },
     copy: {
       patterns: [],
